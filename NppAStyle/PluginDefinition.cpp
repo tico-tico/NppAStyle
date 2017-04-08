@@ -179,6 +179,12 @@ static void formatRunProcCallback( const char *in, const char *out, HWND hwin )
 		::SendMessage( hwin, SCI_SETTEXT, 0, ( LPARAM ) out );
 }
 
+static void formatRunProcCallbackReplace( const char *in, const char *out, HWND hwin )
+{
+	if( 0 != strcmp( in, out ) )
+		::SendMessage( hwin, SCI_REPLACESEL, 0, ( LPARAM ) out );
+}
+
 void AStyleCode( const char *textBuffer, const NppAStyleOption &m_astyleOption, fpRunProc fpRunProcHandler, HWND hwin )
 {
 	astyle::ASFormatter formatter;
@@ -286,14 +292,24 @@ void formatCode()
 	int textSize = ( int )::SendMessage( curScintilla, SCI_GETLENGTH, 0, 0 );
 	textSize += 1;
 	char *textBuffer = ( char * )::malloc( textSize );
-	::SendMessage( curScintilla, SCI_GETTEXT, ( WPARAM )textSize, ( LPARAM )textBuffer );
 
 	const unsigned int pos_cur = ::SendMessage( curScintilla, SCI_GETCURRENTPOS, 0, 0 );
 	const unsigned int lineNumber_cur = ::SendMessage( curScintilla, SCI_LINEFROMPOSITION, pos_cur, 0 );
+	const unsigned int first_vis_line = ::SendMessage( curScintilla, SCI_GETFIRSTVISIBLELINE, 0, 0 );
 
-	AStyleCode( textBuffer, astyleOption, formatRunProcCallback, curScintilla );
+	if( ::SendMessage( curScintilla, SCI_GETSELECTIONEMPTY, 0, 0 ) )
+	{
+		::SendMessage( curScintilla, SCI_GETTEXT, ( WPARAM )textSize, ( LPARAM )textBuffer );
+		AStyleCode( textBuffer, astyleOption, formatRunProcCallback, curScintilla );
+	}
+	else
+	{
+		::SendMessage( curScintilla, SCI_GETSELTEXT, 0, ( LPARAM )textBuffer );
+		AStyleCode( textBuffer, astyleOption, formatRunProcCallbackReplace, curScintilla );
+	}
 
 	::SendMessage( curScintilla, SCI_GOTOLINE, lineNumber_cur, 0 );
+	::SendMessage( curScintilla, SCI_SETFIRSTVISIBLELINE, first_vis_line, 0 );
 
 	::free( textBuffer );
 
