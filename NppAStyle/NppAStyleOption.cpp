@@ -199,12 +199,12 @@ void NppAStyleOption::setFormatterOption( astyle::ASFormatter &formatter ) const
 	formatter.setBreakBlocksMode( shouldBreakBlocks );
 	formatter.setBreakClosingHeaderBlocksMode( shouldBreakClosingHeaderBlocks );
 	formatter.setBreakElseIfsMode( shouldBreakElseIfs );
-	formatter.setAddBracketsMode( shouldAddBrackets );
-	formatter.setAddOneLineBracketsMode( shouldAddOneLineBrackets );
-	formatter.setRemoveBracketsMode( shouldRemoveBrackets );
+	formatter.setAddBracesMode( shouldAddBrackets );
+	formatter.setAddOneLineBracesMode( shouldAddOneLineBrackets );
+	formatter.setRemoveBracesMode( shouldRemoveBrackets );
 	formatter.setBreakOneLineBlocksMode( shouldBreakOneLineBlocks );
 	formatter.setBreakOneLineStatementsMode( shouldBreakOneLineStatements );
-	formatter.setBreakClosingHeaderBracketsMode( shouldBreakClosingHeaderBrackets );
+	formatter.setBreakClosingHeaderBracesMode( shouldBreakClosingHeaderBrackets );
 	formatter.setBreakOneLineHeadersMode( shouldBreakOneLineHeaders );
 	//formatter.setTabSpaceConversionMode( shouldConvertTabs );
 	formatter.setCloseTemplatesMode( shouldCloseTemplates );
